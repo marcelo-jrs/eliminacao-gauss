@@ -25,39 +25,76 @@ def encontrar_pivo(matriz):
     
     return None
 
-def eliminacao_gauss(matriz):
-    nlinhas, ncolunas = matriz.shape
-    
-    for i in range(nlinhas):
-        # Encontrar o pivô
-        pivo =  encontrar_pivo(matriz[i:, :])
-        
-        if pivo is None:
-        # Se não houver pivô, a eliminação está completa
-            break
-    
-        linha_pivo, coluna_pivo = pivo
-        
-        linha_pivo += i  # Ajustar o índice da linha do pivô
-        
-        # Dividir a linha do pivô pelo valor do pivô para torná-lo igual a 1
-        pivô = matriz[linha_pivo, coluna_pivo]
-        matriz[linha_pivo, :] = np.divide(matriz[linha_pivo, :], pivô)
+def eliminacao(matriz):
+    n = len(matriz)
 
-        
-        # Eliminação - multiplicar o valor do pivô pela linha atual e subtrair dessa linha
-        for k in range(linha_pivo + 1, nlinhas):
-            coeficiente = matriz[k, coluna_pivo]
-            matriz[k, :] -= coeficiente * matriz[linha_pivo, :]
-    
+    for i in range(n):
+        # Verificar se o pivô é zero e trocar de linha, se necessário
+        if matriz[i][i] == 0:
+            for j in range(i + 1, n):
+                if matriz[j][i] != 0:
+                    matriz[i], matriz[j] = matriz[j], matriz[i]
+                    break
+            else:
+                continue  # Se não encontrou uma linha para trocar, prossegue para a próxima coluna
+
+        # Zerar os coeficientes abaixo do pivô
+        for j in range(i + 1, n):
+            multiplicador = matriz[j][i] / matriz[i][i]
+            for k in range(i, n + 1):
+                matriz[j][k] -= multiplicador * matriz[i][k]
+
     return matriz
 
-# Exemplo de uso
-AB = np.array([[3, 2, -1, 4],
- [2, -1, 3, 6],
- [1, 3, -2, 5]])
 
-resultado = eliminacao_gauss(AB)
+def decomposicao_LU(matriz):
+    n = len(matriz)
+    L = np.eye(n)
+    U = matriz.copy()
+    P = np.eye(n)
 
-print("Resultado da eliminação de Gauss:")
-print(resultado)
+    for i in range(n):
+        pivot_index = np.argmax(np.abs(U[i:, i])) + i
+
+        if pivot_index != i:
+            P[[i, pivot_index]] = P[[pivot_index, i]]
+
+        for j in range(i + 1, n):
+            multiplicador = U[j, i] / U[i, i]
+            L[j, i] = multiplicador
+            U[j, i:] -= multiplicador * U[i, i:]
+
+    return L, U, P
+
+
+def substituicao_retroativa(matriz):
+    n = len(matriz)
+    solucao = [0] * n
+
+    for i in range(n - 1, -1, -1):
+        soma = 0
+        for j in range(i + 1, n):
+            soma += matriz[i][j] * solucao[j]
+        solucao[i] = (matriz[i][n] - soma) / matriz[i][i]
+
+    return solucao
+
+
+ab = np.array([[1.0, 6.0, 2.0, 4.0, 8.0],
+          [3.0, 19.0, 4.0, 15.0, 25.0],
+          [1.0, 4.0, 8.0, -12.0, 18.0],
+          [5.0, 33.0, 9.0, 3.0, 72.0]])
+
+print("Matriz AB:")
+print(ab)
+
+a = ab[:, :-1]
+b = ab[:, -1]
+L, U, P= decomposicao_LU(a)
+print("L: ")
+print(L)
+print("U: ")
+print(U)
+print("Matriz de permutação: ")
+print(P)
+
