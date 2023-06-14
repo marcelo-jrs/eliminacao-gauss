@@ -18,9 +18,16 @@ def gauss_seidel(A, b, x0, epsilon=1e-5, max_iterations=100):
     return x
 
 # Exemplo
-A = np.array([[4, -1, 0], [1, 3, -1], [2, 0, 5]])
-b = np.array([3, 6, -2])
-x0 = np.array([0, 0, 0])
+A = np.array([[4.0, -1.0, 0.0], [1.0, 3.0, -1.0], [2.0, 0.0, 5.0]])
+b = np.array([3.0, 6.0, -2.0])
+x0 = np.array([0.0, 0.0, 0.0])
+
+
+
+#1,08955224 - 1,35820895 -0,8358209
 
 solution = gauss_seidel(A, b, x0, epsilon=1e-8)
 print("Solução:", solution)
+
+
+#  2,17910448 - 0,8358209

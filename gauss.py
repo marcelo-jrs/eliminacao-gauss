@@ -85,16 +85,13 @@ ab = np.array([[1.0, 6.0, 2.0, 4.0, 8.0],
           [1.0, 4.0, 8.0, -12.0, 18.0],
           [5.0, 33.0, 9.0, 3.0, 72.0]])
 
-print("Matriz AB:")
-print(ab)
+teste = np.array([[4.0, -1.0, 0.0, 3.0], [1.0, 3.0, -1.0, 6.0], [2.0, 0.0, 5.0, -2.0]])
+
+result = eliminacao(teste)
+print(result)
+result = substituicao_retroativa(result)
+print(result)
 
 a = ab[:, :-1]
 b = ab[:, -1]
-L, U, P= decomposicao_LU(a)
-print("L: ")
-print(L)
-print("U: ")
-print(U)
-print("Matriz de permutação: ")
-print(P)
 
