@@ -19,7 +19,7 @@ st.set_page_config(
 
 
 
-tab1, tab2, tab3 = st.tabs(["Parâmetros", "Resultados", "Sobre"])
+tab1, tab2, tab3 = st.tabs(["Parâmetros", "Resultados", "Como Usar"])
 col1, col2, col3, col4 = st.columns(4)
 container_radio = st.container()
 container_matrizA = st.container()
@@ -117,11 +117,9 @@ matrizA, matrizB = user_input_matriz(column_size)
 
 max_iterations, epsilon, x0 = user_input_seidel(column_size)
 
-seidel.gauss_seidel(max_iterations, epsilon, x0, matrizA, matrizB)
-gauss.eliminacao_gauss(matrizA, matrizB)
-
-seidel_click = st.button("Executar gauss-seidel", key="seidel_click")
-gauss_click = st.button("Executar eliminação de gauss", key="gauss_click")
+with tab2:
+    seidel_click = st.button("Executar gauss-seidel", key="seidel_click")
+    gauss_click = st.button("Executar eliminação de gauss", key="gauss_click")
 
 if seidel_click:
     results = seidel.gauss_seidel(max_iterations, epsilon, x0, matrizA, matrizB)
@@ -140,3 +138,8 @@ if gauss_click:
         st.dataframe(u)
         st.write("matriz de permutação")
         st.dataframe(p)
+
+with tab3:
+    st.header("Aprenda como utilizar essa calculadora")
+    "Na primeira aba pode ser encontrada todos os parâmetros para iniciar uma conta, você pode preencher com a sua matriz em cada um dos inputs, e para gauss-seidel, você pode selecionar o máximo de iterações, o épsilon e o palpite"
+    "Na aba de resultados, você pode executar o algoritmo e irá exibir os resultados"
